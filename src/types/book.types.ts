@@ -15,7 +15,7 @@ export interface InteractionPosition {
 
 export interface AudioInteraction {
   id: string;
-  type: 'audio';
+  type: "audio";
   position: InteractionPosition;
   audioFile: string;
   audioUrl?: string;
@@ -26,9 +26,9 @@ export interface AudioInteraction {
 
 export interface ClickableInteraction {
   id: string;
-  type: 'clickable';
+  type: "clickable";
   position: InteractionPosition;
-  action: 'popup';
+  action: "popup";
   content: string;
 }
 
