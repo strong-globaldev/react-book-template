@@ -1,0 +1,23 @@
+:root {
+  /* Colors */
+  --bg-primary: #000000;
+  --bg-overlay: rgba(0, 0, 0, 0.5);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.3);
+  --overlay-hover: rgba(255, 255, 255, 0.1);
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  
+  /* Transitions */
+  --transition-fast: 200ms ease;
+  --transition-normal: 300ms ease;
+  
+  /* Navigation zones */
+  --nav-zone-width: 40%;
+  --nav-center-width: 20%;
+}

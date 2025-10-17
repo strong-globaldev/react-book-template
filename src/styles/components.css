@@ -1,0 +1,56 @@
+/* Book Viewer Styles */
+.book-viewer {
+  @apply fixed inset-0 bg-black overflow-hidden;
+}
+
+.book-container {
+  @apply relative w-full h-full cursor-pointer flex items-center justify-center;
+}
+
+.book-image {
+  @apply max-w-full max-h-full object-contain block;
+  width: auto;
+  height: auto;
+  max-width: 100vw;
+  max-height: 100vh;
+}
+
+/* Navigation Zones */
+.nav-zones {
+  @apply absolute inset-0 flex;
+}
+
+.nav-zone-left,
+.nav-zone-right {
+  @apply h-full opacity-0 hover:bg-white transition-opacity duration-200;
+  width: var(--nav-zone-width);
+}
+
+.nav-zone-left:hover,
+.nav-zone-right:hover {
+  opacity: var(--overlay-hover);
+}
+
+.nav-zone-center {
+  @apply h-full;
+  width: var(--nav-center-width);
+}
+
+/* Page Indicator */
+.page-indicator {
+  @apply absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded;
+}
+
+/* Navigation Hints */
+.nav-hint {
+  @apply absolute top-1/2 transform -translate-y-1/2 text-white text-2xl;
+  opacity: var(--text-secondary);
+}
+
+.nav-hint-left {
+  @apply left-4;
+}
+
+.nav-hint-right {
+  @apply right-4;
+}
