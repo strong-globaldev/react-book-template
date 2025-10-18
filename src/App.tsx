@@ -43,7 +43,6 @@ function App() {
 
   return (
     <div className="fixed inset-0 bg-black overflow-hidden">
-
       <div
         className="relative w-full h-full cursor-pointer flex items-center justify-center"
         onClick={handleNavigation}

@@ -71,3 +71,17 @@ export default defineConfig([
   },
 ])
 ```
+
+## Storybook
+
+Run the component catalog locally with:
+
+```bash
+yarn storybook
+```
+
+To generate a static build (e.g., for deployment):
+
+```bash
+yarn build-storybook
+```
