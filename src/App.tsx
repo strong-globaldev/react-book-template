@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import QuizHotspot from "./components/Hotspot/Quiz";
 
 function App() {
   const [currentPage, setCurrentPage] = useState(1);
