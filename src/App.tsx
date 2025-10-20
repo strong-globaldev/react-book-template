@@ -5,15 +5,25 @@ const RESOLUTION_SCALE_MAP: Array<{
   height: number;
   scale: number;
 }> = [
-  { width: 2048, height: 1536, scale: 0.4128 },
-  { width: 2732, height: 2048, scale: 0.5507 },
-  { width: 1280, height: 800, scale: 0.258 },
-  { width: 2800, height: 1840, scale: 0.5644 },
-  { width: 2560, height: 1600, scale: 0.516 },
-  { width: 3456, height: 2234, scale: 0.6966 },
+  // { width: 2048, height: 1536, scale: 0.4128 },
+  // { width: 2732, height: 2048, scale: 0.5507 },
+  // { width: 1280, height: 800, scale: 0.258 },
+  // { width: 2800, height: 1840, scale: 0.5644 },
+  // { width: 2560, height: 1600, scale: 0.516 },
+  // { width: 3456, height: 2234, scale: 0.6966 },
+  // { width: 1920, height: 1080, scale: 0.387 },
+  // { width: 2560, height: 1440, scale: 0.516 },
+  // { width: 3840, height: 2160, scale: 0.774 },
+
+  { width: 2048, height: 1536, scale: 1 },
+  { width: 2732, height: 2048, scale: 1 },
+  { width: 1280, height: 800, scale: 1 },
+  { width: 2800, height: 1840, scale: 1 },
+  { width: 2560, height: 1600, scale: 1 },
+  { width: 3456, height: 2234, scale: 1 },
   { width: 1920, height: 1080, scale: 1 },
-  { width: 2560, height: 1440, scale: 0.516 },
-  { width: 3840, height: 2160, scale: 0.774 },
+  { width: 2560, height: 1440, scale: 1 },
+  { width: 3840, height: 2160, scale: 1 },
 ];
 const DEFAULT_SCALE = 1;
 
