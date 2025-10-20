@@ -115,14 +115,12 @@ function App() {
         onClick={handleNavigation}
       >
         <img
-          src={`/src/assets/images/page-${currentPage}.jpg`}
+          src={`/src/assets/images/page_${currentPage}.jpg`}
           alt={`Page ${currentPage}`}
           className="max-w-full max-h-full object-contain block"
           style={{
             width: "auto",
             height: "auto",
-            maxWidth: "100vw",
-            maxHeight: "100vh",
             transform: `scale(${imageScale})`,
             transformOrigin: "center center",
           }}
@@ -134,9 +132,9 @@ function App() {
           <div className="w-2/5 h-full opacity-0 hover:bg-white hover:opacity-10 transition-opacity duration-200" />
         </div>
 
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded">
+        {/* <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded">
           {currentPage} / {totalPages}
-        </div>
+        </div> */}
       </div>
     </div>
   );
