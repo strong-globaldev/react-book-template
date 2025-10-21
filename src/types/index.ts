@@ -1,2 +1,3 @@
-export * from './book';
-export * from './quiz';
+export * from "./book";
+export * from "./manifest";
+export * from "./quiz";
