@@ -12,4 +12,4 @@ export * from "./SettingsIcon";
 export * from "./TagIcon";
 export * from "./TranslateIcon";
 export * from "./VideoIcon";
-export * from "./FullscreenIcon";
+export * from "./FullScreenIcon";

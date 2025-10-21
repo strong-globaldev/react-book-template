@@ -115,7 +115,7 @@ function App() {
         onClick={handleNavigation}
       >
         <img
-          src={`/src/assets/images/page_${currentPage}.jpg`}
+          src={`/assets/page_${currentPage}.jpg`}
           alt={`Page ${currentPage}`}
           className="max-w-full max-h-full object-contain block"
           style={{
