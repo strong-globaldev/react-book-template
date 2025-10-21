@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 const RESOLUTION_SCALE_MAP: Array<{
   width: number;
@@ -26,6 +27,7 @@ const RESOLUTION_SCALE_MAP: Array<{
   { width: 3840, height: 2160, scale: 1 },
 ];
 const DEFAULT_SCALE = 1;
+const ASSET_BASE_URL = import.meta.env.BASE_URL;
 
 function App() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -111,30 +113,27 @@ function App() {
   return (
     <div className="fixed inset-0 bg-black overflow-hidden">
       <div
-        className="relative w-full h-full cursor-pointer flex items-center justify-center"
+        className="relative w-full h-full cursor-pointer flex items-center justify-center select-none"
         onClick={handleNavigation}
       >
-        <img
-          src={`/assets/page_${currentPage}.jpg`}
-          alt={`Page ${currentPage}`}
-          className="max-w-full max-h-full object-contain block"
-          style={{
-            width: "auto",
-            height: "auto",
-            transform: `scale(${imageScale})`,
-            transformOrigin: "center center",
-          }}
-        />
-
-        <div className="absolute inset-0 flex">
-          <div className="w-2/5 h-full opacity-0 hover:bg-white hover:opacity-10 transition-opacity duration-200" />
-          <div className="w-1/5 h-full" />
-          <div className="w-2/5 h-full opacity-0 hover:bg-white hover:opacity-10 transition-opacity duration-200" />
-        </div>
-
-        {/* <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-50 text-white px-3 py-1 rounded">
-          {currentPage} / {totalPages}
-        </div> */}
+        <AnimatePresence mode="wait">
+          <motion.img
+            key={currentPage}
+            src={`${ASSET_BASE_URL}assets/page_${currentPage}.jpg`}
+            alt={`Page ${currentPage}`}
+            className="max-w-full max-h-full object-contain block select-none"
+            draggable={false}
+            initial={{ scale: imageScale * 0.9, opacity: 0 }}
+            animate={{ scale: imageScale, opacity: 1 }}
+            exit={{ scale: imageScale * 1.05, opacity: 0 }}
+            transition={{ duration: 0.35, ease: "easeOut" }}
+            style={{
+              width: "auto",
+              height: "auto",
+              transformOrigin: "center center",
+            }}
+          />
+        </AnimatePresence>
       </div>
     </div>
   );

@@ -1,5 +1,7 @@
+const ASSET_BASE_URL = import.meta.env.BASE_URL;
+
 export const getImagePath = (pageNumber: number): string => {
-  return `/src/assets/images/page-${pageNumber}.jpg`;
+  return `${ASSET_BASE_URL}assets/page_${pageNumber}.jpg`;
 };
 
 export const isValidPage = (page: number, totalPages: number): boolean => {
