@@ -22,6 +22,10 @@ export function BookViewer({
 }: BookViewerProps) {
   const [selectedHotspot, setSelectedHotspot] =
     useState<ManifestHotspot | null>(null);
+  const [showHotspots, setShowHotspots] = useState(true);
+  const [visitedHotspotIds, setVisitedHotspotIds] = useState<Set<string>>(
+    () => new Set()
+  );
 
   const pages = useMemo(() => normalizeManifestPages(manifest), [manifest]);
   const pageNumbers = useMemo(
@@ -49,6 +53,12 @@ export function BookViewer({
       setSelectedHotspot(null);
     }
   }, [activePage, selectedHotspot]);
+
+  useEffect(() => {
+    if (!showHotspots && selectedHotspot) {
+      setSelectedHotspot(null);
+    }
+  }, [showHotspots, selectedHotspot]);
 
   useEffect(() => {
     if (!activePage) {
@@ -86,6 +96,19 @@ export function BookViewer({
 
   const handleHotspotSelect = useCallback((hotspot: ManifestHotspot) => {
     setSelectedHotspot(hotspot);
+    setVisitedHotspotIds((previous) => {
+      if (previous.has(hotspot.id)) {
+        return previous;
+      }
+
+      const next = new Set(previous);
+      next.add(hotspot.id);
+      return next;
+    });
+  }, []);
+
+  const handleToggleHotspots = useCallback(() => {
+    setShowHotspots((previous) => !previous);
   }, []);
 
   if (!activePage) {
@@ -111,6 +134,9 @@ export function BookViewer({
             pageNumber={activePage.pageNumber}
             onHotspotSelect={handleHotspotSelect}
             selectedHotspotId={selectedHotspot?.id ?? null}
+            showHotspots={showHotspots}
+            visitedHotspotIds={visitedHotspotIds}
+            onHotspotToggle={handleToggleHotspots}
           />
         </AnimatePresence>
       </div>

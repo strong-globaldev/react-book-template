@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Manifest } from "../types";
 
 interface UseBookNavigationResult {
@@ -10,7 +10,9 @@ interface UseBookNavigationResult {
 export const useBookNavigation = (
   manifest: Manifest | null
 ): UseBookNavigationResult => {
+  const NAVIGATION_COOLDOWN_MS = 500;
   const [currentPage, setCurrentPage] = useState(1);
+  const lastNavigationRef = useRef(0);
 
   const availablePages = useMemo(() => {
     if (!manifest) {
@@ -29,7 +31,6 @@ export const useBookNavigation = (
       .filter(Number.isFinite)
       .sort((left, right) => left - right);
   }, [manifest]);
-  console.log("availablePages", availablePages);
 
   useEffect(() => {
     if (!availablePages.length) {
@@ -51,8 +52,31 @@ export const useBookNavigation = (
     }
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "ArrowLeft") {
+      if (event.repeat) {
+        return;
+      }
+
+      const now =
+        typeof performance !== "undefined" ? performance.now() : Date.now();
+      if (now - lastNavigationRef.current < NAVIGATION_COOLDOWN_MS) {
+        return;
+      }
+
+      const guardNavigation = (update: (previousPage: number) => number) => {
         setCurrentPage((page) => {
+          const nextPage = update(page);
+          if (page === nextPage) {
+            return page;
+          }
+
+          lastNavigationRef.current = now;
+          return nextPage;
+        });
+      };
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        guardNavigation((page) => {
           const index = availablePages.indexOf(page);
           if (index <= 0) {
             return availablePages[0];
@@ -61,7 +85,8 @@ export const useBookNavigation = (
           return availablePages[index - 1];
         });
       } else if (event.key === "ArrowRight") {
-        setCurrentPage((page) => {
+        event.preventDefault();
+        guardNavigation((page) => {
           const index = availablePages.indexOf(page);
           if (index === -1) {
             return availablePages[0];
@@ -70,9 +95,11 @@ export const useBookNavigation = (
           return availablePages[Math.min(index + 1, availablePages.length - 1)];
         });
       } else if (event.key === "Home") {
-        setCurrentPage(availablePages[0]);
+        event.preventDefault();
+        guardNavigation(() => availablePages[0]);
       } else if (event.key === "End") {
-        setCurrentPage(availablePages[availablePages.length - 1]);
+        event.preventDefault();
+        guardNavigation(() => availablePages[availablePages.length - 1]);
       }
     };
 
