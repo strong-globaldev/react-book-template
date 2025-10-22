@@ -108,6 +108,7 @@ export function BookViewer({
             alt={`Page ${activePage.pageNumber}`}
             hotspots={activePage.hotspots}
             imageSrc={getManifestAssetPath(activePage.pageImage)}
+            pageNumber={activePage.pageNumber}
             onHotspotSelect={handleHotspotSelect}
             selectedHotspotId={selectedHotspot?.id ?? null}
           />

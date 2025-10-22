@@ -1,4 +1,5 @@
 import { memo } from "react";
+import type { MouseEvent } from "react";
 import { motion } from "framer-motion";
 import type { ManifestHotspot } from "../../types";
 import { getHotspotCentroid, pointsToSvgString } from "../../utils";
@@ -23,6 +24,12 @@ export const HotspotPolygon = memo(function HotspotPolygon({
       }))
     : hotspot.points;
   const points = pointsToSvgString(scaledPoints);
+  const handleSelect = (
+    event: MouseEvent<SVGPolygonElement | SVGCircleElement>
+  ) => {
+    event.stopPropagation();
+    onSelect?.(hotspot);
+  };
 
   return (
     <>
@@ -33,7 +40,7 @@ export const HotspotPolygon = memo(function HotspotPolygon({
         transition={{ duration: 0.25 }}
         points={points}
         className="cursor-pointer fill-cyan-400/20 stroke-cyan-400 stroke-[6px] drop-shadow-[0_0_12px_rgba(34,211,238,0.6)]"
-        onClick={() => onSelect?.(hotspot)}
+        onClick={handleSelect}
         whileHover={{ opacity: 0.6 }}
       />
       {centroid ? (
@@ -42,7 +49,7 @@ export const HotspotPolygon = memo(function HotspotPolygon({
           cy={centroid.y}
           r={isActive ? 36 : 28}
           className="cursor-pointer fill-cyan-400/70 stroke-white/90 stroke-[8px]"
-          onClick={() => onSelect?.(hotspot)}
+          onClick={handleSelect}
           initial={{ scale: 0.85, opacity: 0 }}
           animate={{ scale: isActive ? 1.05 : 1, opacity: 1 }}
           exit={{ scale: 0.85, opacity: 0 }}

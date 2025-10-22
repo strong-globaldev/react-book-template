@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import type { ManifestHotspot } from "../../types";
 import { HotspotPolygon } from "./HotspotPolygon";
+import { PageIndicator } from "../UI";
 
 interface PageCanvasProps {
   alt: string;
   hotspots: ManifestHotspot[];
   imageSrc: string;
+  pageNumber: number;
   onHotspotSelect?: (hotspot: ManifestHotspot) => void;
   selectedHotspotId: string | null;
 }
@@ -20,6 +22,7 @@ export function PageCanvas({
   alt,
   hotspots,
   imageSrc,
+  pageNumber,
   onHotspotSelect,
   selectedHotspotId,
 }: PageCanvasProps) {
@@ -57,7 +60,6 @@ export function PageCanvas({
       active = false;
     };
   }, [imageSrc]);
-  console.log("dimensions: ", dimensions);
   return (
     <motion.div
       className="relative flex h-full w-full items-center justify-center"
@@ -89,6 +91,22 @@ export function PageCanvas({
               />
             ))}
           </g>
+          <foreignObject
+            x={Math.max(dimensions.width - 500, 0)}
+            y={Math.max(dimensions.height - 220, 0)}
+            width={360}
+            height={220}
+            className="pointer-events-none"
+          >
+            <div className="flex h-full w-full items-end justify-end">
+              <div
+                className="pointer-events-auto"
+                onClick={(event) => event.stopPropagation()}
+              >
+                <PageIndicator pageNumber={pageNumber} />
+              </div>
+            </div>
+          </foreignObject>
         </svg>
       ) : (
         <div className="text-white/60">Loading page…</div>

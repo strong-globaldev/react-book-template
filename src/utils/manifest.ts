@@ -7,16 +7,71 @@ export interface NormalizedManifestPage extends ManifestPage {
   id: string;
 }
 
+const getPageCount = (manifest: Manifest): number => {
+  if (typeof manifest.totalPages === "number" && manifest.totalPages > 0) {
+    return manifest.totalPages;
+  }
+
+  return Object.keys(manifest.page_groups).length;
+};
+
+const inferPageImageFileName = (
+  manifest: Manifest,
+  pageNumber: number
+): string => {
+  const existingImage =
+    manifest.page_groups[String(pageNumber)]?.pageImage ??
+    Object.values(manifest.page_groups)[0]?.pageImage;
+
+  if (!existingImage) {
+    return `page_${pageNumber}.jpg`;
+  }
+
+  const match = existingImage.match(/^(.*?)(\d+)(\.[^.]+)$/);
+  if (!match) {
+    return `page_${pageNumber}.jpg`;
+  }
+
+  const [, prefix, digits, extension] = match;
+  const requiresPadding = digits.startsWith("0");
+  const width = digits.length;
+  const formattedNumber = requiresPadding
+    ? String(pageNumber).padStart(width, "0")
+    : String(pageNumber);
+
+  return `${prefix}${formattedNumber}${extension}`;
+};
+
+const resolveManifestPage = (
+  manifest: Manifest,
+  pageNumber: number
+): ManifestPage => {
+  const existing = manifest.page_groups[String(pageNumber)];
+  if (existing) {
+    return existing;
+  }
+
+  return {
+    pageImage: inferPageImageFileName(manifest, pageNumber),
+    hotspots: [],
+  };
+};
+
 export const normalizeManifestPages = (
   manifest: Manifest
 ): NormalizedManifestPage[] => {
-  return Object.entries(manifest.page_groups)
-    .map(([key, page]) => ({
+  const totalPages = getPageCount(manifest);
+
+  return Array.from({ length: totalPages }, (_, index) => {
+    const pageNumber = index + 1;
+    const page = resolveManifestPage(manifest, pageNumber);
+
+    return {
       ...page,
-      pageNumber: Number.parseInt(key, 10),
-      id: key,
-    }))
-    .sort((left, right) => left.pageNumber - right.pageNumber);
+      pageNumber,
+      id: String(pageNumber),
+    };
+  });
 };
 
 export const getManifestPage = (
@@ -27,13 +82,13 @@ export const getManifestPage = (
     return undefined;
   }
 
-  const raw = manifest.page_groups[String(pageNumber)];
-  if (!raw) {
+  const totalPages = getPageCount(manifest);
+  if (pageNumber < 1 || pageNumber > totalPages) {
     return undefined;
   }
 
   return {
-    ...raw,
+    ...resolveManifestPage(manifest, pageNumber),
     pageNumber,
     id: String(pageNumber),
   };
