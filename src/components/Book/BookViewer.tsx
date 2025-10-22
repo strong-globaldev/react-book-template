@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import type { MouseEvent } from "react";
 import { AnimatePresence } from "framer-motion";
 import type { Manifest, ManifestHotspot } from "../../types";
 import {
@@ -40,6 +39,18 @@ export function BookViewer({
     );
   }, [currentPage, manifest]);
 
+  const activePageIndex = useMemo(() => {
+    if (!activePage) {
+      return -1;
+    }
+
+    return pageNumbers.indexOf(activePage.pageNumber);
+  }, [activePage, pageNumbers]);
+
+  const hasPreviousPage = activePageIndex > 0;
+  const hasNextPage =
+    activePageIndex !== -1 && activePageIndex < pageNumbers.length - 1;
+
   useEffect(() => {
     if (!activePage) {
       return;
@@ -70,29 +81,21 @@ export function BookViewer({
     }
   }, [activePage, currentPage, onPageChange]);
 
-  const handleSurfaceClick = useCallback(
-    (event: MouseEvent<HTMLDivElement>) => {
-      if (!activePage) {
-        return;
-      }
+  const handleGoToPreviousPage = useCallback(() => {
+    if (!hasPreviousPage) {
+      return;
+    }
 
-      const container = event.currentTarget.getBoundingClientRect();
-      const clickX = event.clientX - container.left;
-      const relative = clickX / container.width;
-      const index = pageNumbers.indexOf(activePage.pageNumber);
+    onPageChange(pageNumbers[activePageIndex - 1]);
+  }, [activePageIndex, hasPreviousPage, onPageChange, pageNumbers]);
 
-      if (relative <= 0.4 && index > 0) {
-        onPageChange(pageNumbers[index - 1]);
-      } else if (
-        relative >= 0.6 &&
-        index !== -1 &&
-        index < pageNumbers.length - 1
-      ) {
-        onPageChange(pageNumbers[index + 1]);
-      }
-    },
-    [activePage, onPageChange, pageNumbers]
-  );
+  const handleGoToNextPage = useCallback(() => {
+    if (!hasNextPage) {
+      return;
+    }
+
+    onPageChange(pageNumbers[activePageIndex + 1]);
+  }, [activePageIndex, hasNextPage, onPageChange, pageNumbers]);
 
   const handleHotspotSelect = useCallback((hotspot: ManifestHotspot) => {
     setSelectedHotspot(hotspot);
@@ -121,10 +124,7 @@ export function BookViewer({
 
   return (
     <div className="relative flex h-full w-full flex-col bg-black text-white">
-      <div
-        className="relative flex h-full flex-1 cursor-pointer items-center justify-center"
-        onClick={handleSurfaceClick}
-      >
+      <div className="relative flex h-full flex-1 items-center justify-center">
         <AnimatePresence mode="wait">
           <PageCanvas
             key={activePage.id}
@@ -137,6 +137,10 @@ export function BookViewer({
             showHotspots={showHotspots}
             visitedHotspotIds={visitedHotspotIds}
             onHotspotToggle={handleToggleHotspots}
+            hasPreviousPage={hasPreviousPage}
+            hasNextPage={hasNextPage}
+            onPreviousPage={handleGoToPreviousPage}
+            onNextPage={handleGoToNextPage}
           />
         </AnimatePresence>
       </div>
